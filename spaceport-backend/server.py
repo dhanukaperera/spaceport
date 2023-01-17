@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-
+from datetime import date
 
 db = SQLAlchemy()
 app = Flask(__name__)
@@ -52,6 +52,26 @@ query_filters = {
     'ex': lambda m: Spaceship.mfd == m,
     'bf': lambda m: Spaceship.mfd < m
 }
+def sample_data():
+    ship1 = Spaceship(100, "red", 50, date(2012,12,12), True)
+    ship2 = Spaceship(101, "green",150, date(2016,11,21), True)
+    ship3 = Spaceship(102, "blue", 120, date(2020,5,14), True)
+    ship4 = Spaceship(103, "red", 200, date(2000,5,13), False)
+    ship5 = Spaceship(104, "green", 110, date(1994,12,22), False)
+    ship6 = Spaceship(105, "blue", 90, date(1994,8,11), False)
+
+    db.session.add(ship1)
+    db.session.add(ship2)
+    db.session.add(ship3)
+    db.session.add(ship4)
+    db.session.add(ship5)
+    db.session.add(ship6)
+
+    db.session.commit()
+
+with app.app_context():
+    db.create_all()
+    sample_data()
 
 @app.route('/spaceships',methods=['GET'])
 def spaceships_list():
@@ -94,7 +114,6 @@ def filter_spaceships_list():
 
         spaceships = query.all()
         return jsonify([*map(spaceship_serializer,spaceships)]), 200
-        #return jsonify({"spaceships":[*map(spaceship_serializer,spaceships)]}), 200
 
     except KeyError as e:
         return jsonify(error=f"Invalid filter type: {e}"), 400

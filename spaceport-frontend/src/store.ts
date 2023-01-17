@@ -26,7 +26,7 @@ export class SpaceshipStore {
 	};
 }
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://0.0.0.0:5000";
 
 const spaceshipStore = new SpaceshipStore();
 
