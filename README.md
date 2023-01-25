@@ -6,7 +6,6 @@ Frontend : React + TypeScript
 Backend : Python + Flask
 Database : Sqlite
 
-Host URL : http://139.162.245.253
 
 ------------
 
